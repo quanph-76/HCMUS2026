@@ -1,0 +1,512 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Công cụ tính điểm HCMUS 2026</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <style>
+        :root {
+            --primary: #1d4ed8;
+            --primary-light: #eff6ff;
+            --bg: #f8fafc;
+            --card-bg: #ffffff;
+            --text-main: #1e293b;
+            --text-sub: #64748b;
+            --border: #e2e8f0;
+            --success: #22c55e;
+            --success-light: #f0fdf4;
+        }
+
+        * { box-sizing: border-box; font-family: 'Inter', sans-serif; }
+        body { background-color: var(--bg); color: var(--text-main); margin: 0; padding: 20px; }
+
+        /* Style cho tiêu đề lớn phía trên cùng */
+        .app-header {
+            text-align: center;
+            margin-bottom: 30px;
+            margin-top: 10px;
+        }
+        
+        .app-header h1 {
+            color: var(--primary);
+            font-size: 28px;
+            font-weight: 800;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            margin: 0 0 8px 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 12px;
+        }
+        
+        .app-header p {
+            color: var(--text-sub);
+            font-size: 15px;
+            margin: 0;
+            font-weight: 500;
+        }
+
+        .app-container {
+            max-width: 1100px;
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: 1fr 380px;
+            gap: 24px;
+        }
+
+        @media (max-width: 992px) {
+            .app-container { grid-template-columns: 1fr; }
+            .sidebar { position: static !important; }
+        }
+
+        /* Card Styles */
+        .card {
+            background: var(--card-bg);
+            border-radius: 16px;
+            border: 1px solid var(--border);
+            padding: 24px;
+            margin-bottom: 24px;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+        }
+
+        .card-title {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            font-size: 18px;
+            font-weight: 700;
+            color: #0f172a;
+            margin-bottom: 24px;
+        }
+
+        .card-title i { color: var(--primary); }
+
+        /* Weight Sliders */
+        .weight-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
+        .weight-item { background: var(--bg); padding: 16px; border-radius: 12px; }
+        .weight-header { display: flex; justify-content: space-between; margin-bottom: 15px; font-weight: 600; }
+        .weight-value { color: var(--primary); background: white; padding: 4px 12px; border-radius: 6px; border: 1px solid var(--border); }
+        input[type="range"] { width: 100%; height: 6px; accent-color: var(--primary); cursor: pointer; }
+
+        /* Table Academic */
+        .table-responsive { overflow-x: auto; }
+        table { width: 100%; border-collapse: collapse; margin-bottom: 20px; }
+        th { text-align: left; padding: 12px; font-size: 13px; color: var(--text-sub); font-weight: 500; }
+        td { padding: 8px; }
+        
+        .input-score {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            text-align: center;
+            font-size: 14px;
+            transition: all 0.2s;
+        }
+        .input-score:focus { border-color: var(--primary); outline: none; background: var(--primary-light); }
+
+        .quick-input-box {
+            background: var(--bg);
+            padding: 16px;
+            border-radius: 12px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border: 1px dashed var(--border);
+        }
+
+        /* Result Sidebar */
+        .sidebar { position: sticky; top: 20px; height: fit-content; }
+        .result-card { padding: 0; overflow: hidden; border: none; }
+        .result-header {
+            background: var(--primary);
+            color: white;
+            padding: 32px 24px;
+            text-align: left;
+            position: relative;
+        }
+        .result-header h4 { margin: 0; font-weight: 500; opacity: 0.9; font-size: 16px; }
+        .main-score { font-size: 56px; font-weight: 800; margin: 8px 0; }
+        .main-score span { font-size: 20px; opacity: 0.7; font-weight: 500; }
+        .sub-score-30 { font-size: 16px; opacity: 0.9; }
+
+        .result-body { padding: 24px; }
+        .branch-item {
+            padding: 16px;
+            border-radius: 12px;
+            border: 1px solid var(--border);
+            margin-bottom: 12px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .branch-item.active { border-color: var(--success); background: var(--success-light); }
+        .branch-label div:first-child { font-weight: 600; margin-bottom: 4px; }
+        .branch-label div:last-child { font-size: 12px; color: var(--text-sub); }
+        .branch-val { text-align: right; }
+        .branch-val div:first-child { font-weight: 700; font-size: 18px; }
+        .branch-val div:last-child { font-size: 12px; opacity: 0.8; }
+
+        .detail-row { display: flex; justify-content: space-between; margin-bottom: 10px; font-size: 14px; }
+        .detail-row span:last-child { font-weight: 600; }
+        
+        .badge-bonus {
+            background: #fff8e1;
+            border: 1px solid #ffe082;
+            padding: 10px;
+            border-radius: 8px;
+            margin-top: 15px;
+            font-size: 13px;
+        }
+
+        .select-input {
+            width: 100%;
+            padding: 10px;
+            border-radius: 8px;
+            border: 1px solid var(--border);
+            background: white;
+        }
+    </style>
+</head>
+<body>
+
+<!-- Khối tiêu đề chính mới thêm -->
+<div class="app-header">
+    <h1><i class="fa-solid fa-graduation-cap"></i> Công cụ tính toán điểm HCMUS</h1>
+    <p>Hệ thống tự động tính toán điểm xét tuyển Phương thức 2 - Tuyển sinh 2026</p>
+</div>
+
+<div class="app-container">
+    <div class="main-content">
+        <div class="card">
+            <div class="card-title"><i class="fa-solid fa-gear"></i> 1. Trọng số (W)</div>
+            <div class="weight-grid">
+                <div class="weight-item">
+                    <div class="weight-header">
+                        <span>Nhánh 1 (THPT + Học bạ)</span>
+                    </div>
+                    <label style="font-size: 12px; color: var(--text-sub);">w1 (THPT)</label>
+                    <div style="display: flex; align-items: center; gap: 15px; margin: 10px 0;">
+                        <input type="range" id="w1_slider" min="0" max="1" step="0.05" value="0.7">
+                        <span class="weight-value" id="w1_text">0.70</span>
+                    </div>
+                    <div class="quick-input-box" style="padding: 8px 12px; font-size: 13px;">
+                        <span>w2 (Học bạ) = 1 - w1</span>
+                        <span style="font-weight: 700; color: var(--primary);" id="w2_text">0.30</span>
+                    </div>
+                </div>
+
+                <div class="weight-item">
+                    <div class="weight-header">
+                        <span>Nhánh 2 (ĐGNL + Học bạ)</span>
+                    </div>
+                    <label style="font-size: 12px; color: var(--text-sub);">w3 (ĐGNL)</label>
+                    <div style="display: flex; align-items: center; gap: 15px; margin: 10px 0;">
+                        <input type="range" id="w3_slider" min="0" max="1" step="0.05" value="0.7">
+                        <span class="weight-value" id="w3_text">0.70</span>
+                    </div>
+                    <div class="quick-input-box" style="padding: 8px 12px; font-size: 13px;">
+                        <span>w4 (Học bạ) = 1 - w3</span>
+                        <span style="font-weight: 700; color: var(--primary);" id="w4_text">0.30</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="card">
+            <div class="card-title"><i class="fa-solid fa-book"></i> 2. Điểm học bạ</div>
+            <div class="table-responsive">
+                <table>
+                    <thead>
+                        <tr>
+                            <th width="20%">Môn</th>
+                            <th width="25%">Lớp 10</th>
+                            <th width="25%">Lớp 11</th>
+                            <th width="25%">Lớp 12</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>Môn 1</td>
+                            <td><input type="number" class="input-score hb-input" data-subject="1" data-year="10" value="0.0"></td>
+                            <td><input type="number" class="input-score hb-input" data-subject="1" data-year="11" value="0.0"></td>
+                            <td><input type="number" class="input-score hb-input" data-subject="1" data-year="12" value="0.0"></td>
+                        </tr>
+                        <tr>
+                            <td>Môn 2</td>
+                            <td><input type="number" class="input-score hb-input" data-subject="2" data-year="10" value="0.0"></td>
+                            <td><input type="number" class="input-score hb-input" data-subject="2" data-year="11" value="0.0"></td>
+                            <td><input type="number" class="input-score hb-input" data-subject="2" data-year="12" value="0.0"></td>
+                        </tr>
+                        <tr>
+                            <td>Môn 3</td>
+                            <td><input type="number" class="input-score hb-input" data-subject="3" data-year="10" value="0.0"></td>
+                            <td><input type="number" class="input-score hb-input" data-subject="3" data-year="11" value="0.0"></td>
+                            <td><input type="number" class="input-score hb-input" data-subject="3" data-year="12" value="0.0"></td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            <div class="quick-input-box">
+                <div>
+                    <div style="font-weight: 600;">Nhập nhanh tổng học bạ</div>
+                    <div style="font-size: 12px; color: var(--text-sub);">Tổng điểm 3 môn trên thang 30.</div>
+                </div>
+                <input type="number" id="hb_quick" class="input-score" style="width: 100px; font-weight: 700; color: var(--primary);" value="0.00">
+            </div>
+        </div>
+
+        <div class="card">
+            <div class="card-title"><i class="fa-solid fa-bolt"></i> 3. Điểm thi</div>
+            <div class="weight-grid">
+                <div>
+                    <h5 style="margin-top: 0;"><i class="fa-solid fa-graduation-cap"></i> Kỳ thi THPT 2026</h5>
+                    <div style="display: grid; gap: 10px;">
+                        <div style="display: flex; align-items: center; justify-content: space-between;">
+                            <span style="font-size: 14px;">Môn 1</span>
+                            <input type="number" class="input-score thpt-input" style="width: 120px;" value="0.0">
+                        </div>
+                        <div style="display: flex; align-items: center; justify-content: space-between;">
+                            <span style="font-size: 14px;">Môn 2</span>
+                            <input type="number" class="input-score thpt-input" style="width: 120px;" value="0.0">
+                        </div>
+                        <div style="display: flex; align-items: center; justify-content: space-between;">
+                            <span style="font-size: 14px;">Môn 3</span>
+                            <input type="number" class="input-score thpt-input" style="width: 120px;" value="0.0">
+                        </div>
+                    </div>
+                    <div class="quick-input-box" style="margin-top: 15px;">
+                        <span style="font-size: 13px;">Nhập nhanh tổng THPT</span>
+                        <input type="number" id="thpt_quick" class="input-score" style="width: 80px;" value="0.00">
+                    </div>
+                </div>
+
+                <div style="border-left: 1px solid var(--border); padding-left: 20px;">
+                    <h5 style="margin-top: 0;"><i class="fa-solid fa-atom"></i> Kỳ thi ĐGNL 2026</h5>
+                    <div class="form-group" style="margin-bottom: 12px;">
+                        <label style="font-size: 13px; color: var(--text-sub);">Điểm thi ĐGNL đạt được</label>
+                        <input type="number" id="dgnl_score" class="input-score" style="text-align: left;" value="850">
+                    </div>
+                    <div class="form-group" style="margin-bottom: 12px;">
+                        <label style="font-size: 13px; color: var(--text-sub); font-weight: 600; color: var(--primary);">Điểm Max ĐGNL (Có thể tự sửa)</label>
+                        <input type="number" id="dgnl_max" class="input-score" style="text-align: left; font-weight: bold; border-color: var(--primary);" value="1200">
+                    </div>
+                    <div class="quick-input-box" style="padding: 8px 12px; background: #f1f5f9;">
+                        <span style="font-size: 13px;">Chuẩn hóa 100:</span>
+                        <span style="font-weight: 700;" id="dgnl_norm">70.83</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="card">
+            <div class="card-title"><i class="fa-solid fa-award"></i> 4. Ưu tiên & Điểm cộng</div>
+            <div class="weight-grid" style="grid-template-columns: 1fr 1fr 120px;">
+                <div>
+                    <label style="font-size: 12px; color: var(--text-sub);">Khu vực</label>
+                    <select id="kv_select" class="select-input">
+                        <option value="0">Khu vực 3 (0đ)</option>
+                        <option value="0.25">Khu vực 2 (0.25đ)</option>
+                        <option value="0.5">Khu vực 2-NT (0.5đ)</option>
+                        <option value="0.75">Khu vực 1 (0.75đ)</option>
+                    </select>
+                </div>
+                <div>
+                    <label style="font-size: 12px; color: var(--text-sub);">Đối tượng</label>
+                    <select id="dt_select" class="select-input">
+                        <option value="0">Không có ưu tiên</option>
+                        <option value="1">Nhóm ưu tiên 2 (1đ)</option>
+                        <option value="2">Nhóm ưu tiên 1 (2đ)</option>
+                    </select>
+                </div>
+                <div>
+                    <label style="font-size: 12px; color: var(--text-sub);">Điểm cộng khác</label>
+                    <input type="number" id="other_bonus" class="input-score" value="0.0">
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="sidebar">
+        <div class="card result-card">
+            <div class="result-header">
+                <h4>Điểm xét tuyển</h4>
+                <div class="main-score" id="total_100">0.00 <span>/ 100</span></div>
+                <div class="sub-score-30">Thang 30: <strong id="total_30">0.00</strong></div>
+                <div style="position: absolute; right: 20px; top: 35px; opacity: 0.2; font-size: 60px;">
+                    <i class="fa-solid fa-calculator"></i>
+                </div>
+            </div>
+            
+            <div class="result-body">
+                <div class="branch-item" id="card_branch1">
+                    <div class="branch-label">
+                        <div>THPT + Học bạ</div>
+                        <div id="w1_label_desc">70% + 30%</div>
+                    </div>
+                    <div class="branch-val">
+                        <div id="val_branch1">0.00</div>
+                        <div id="val_branch1_30">~ 0.00 / 30</div>
+                    </div>
+                </div>
+
+                <div class="branch-item" id="card_branch2">
+                    <div class="branch-label">
+                        <div>ĐGNL + Học bạ</div>
+                        <div id="w3_label_desc">70% + 30%</div>
+                    </div>
+                    <div class="branch-val">
+                        <div id="val_branch2">0.00</div>
+                        <div id="val_branch2_30">~ 0.00 / 30</div>
+                    </div>
+                </div>
+
+                <div style="margin: 20px 0 10px; color: var(--text-sub); font-size: 12px; font-weight: 700; text-transform: uppercase; letter-spacing: 1px;">Điểm học lực</div>
+                <div class="detail-row"><span>ĐGNL chuẩn hóa</span><span id="res_dgnl">0.00</span></div>
+                <div class="detail-row"><span>THPT chuẩn hóa</span><span id="res_thpt">0.00</span></div>
+                <div class="detail-row"><span>Học bạ chuẩn hóa</span><span id="res_hb">0.00</span></div>
+
+                <div style="margin: 20px 0 10px; color: var(--text-sub); font-size: 12px; font-weight: 700; text-transform: uppercase; letter-spacing: 1px;">Ưu tiên & Điểm cộng</div>
+                <div class="detail-row"><span>Cộng gốc (thang 30)</span><span id="res_bonus_raw">0.00</span></div>
+                
+                <div class="badge-bonus" id="bonus_applied_box">
+                    <div style="display: flex; justify-content: space-between; font-weight: 700; color: #856404;">
+                        <span>Cộng thực nhận</span>
+                        <span id="res_bonus_final">~ +0.00</span>
+                    </div>
+                    <div style="font-size: 11px; margin-top: 4px; opacity: 0.8;" id="bonus_note">Dành cho thang 100</div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    // Elements
+    const w1Slider = document.getElementById('w1_slider');
+    const w3Slider = document.getElementById('w3_slider');
+    const hbInputs = document.querySelectorAll('.hb-input');
+    const thptInputs = document.querySelectorAll('.thpt-input');
+    const dgnlInput = document.getElementById('dgnl_score');
+    const dgnlMaxInput = document.getElementById('dgnl_max');
+    const kvSelect = document.getElementById('kv_select');
+    const dtSelect = document.getElementById('dt_select');
+    const otherBonus = document.getElementById('other_bonus');
+
+    function calculate() {
+        // 1. Weights
+        const w1 = parseFloat(w1Slider.value);
+        const w2 = 1 - w1;
+        const w3 = parseFloat(w3Slider.value);
+        const w4 = 1 - w3;
+
+        document.getElementById('w1_text').innerText = w1.toFixed(2);
+        document.getElementById('w2_text').innerText = w2.toFixed(2);
+        document.getElementById('w3_text').innerText = w3.toFixed(2);
+        document.getElementById('w4_text').innerText = w4.toFixed(2);
+        document.getElementById('w1_label_desc').innerText = `${(w1*100).toFixed(0)}% + ${(w2*100).toFixed(0)}%`;
+        document.getElementById('w3_label_desc').innerText = `${(w3*100).toFixed(0)}% + ${(w4*100).toFixed(0)}%`;
+
+        // 2. Academic Record (Học bạ)
+        let hb_total_30 = 0;
+        let hb_sum = 0;
+        hbInputs.forEach(i => hb_sum += parseFloat(i.value || 0));
+        hb_total_30 = hb_sum / 3; 
+        
+        if(hb_sum === 0) hb_total_30 = parseFloat(document.getElementById('hb_quick').value || 0);
+        else document.getElementById('hb_quick').value = hb_total_30.toFixed(2);
+
+        const hb_100 = (hb_total_30 / 30) * 100;
+
+        // 3. Exam THPT
+        let thpt_sum = 0;
+        thptInputs.forEach(i => thpt_sum += parseFloat(i.value || 0));
+        let thpt_total_30 = thpt_sum;
+        if(thpt_sum === 0) thpt_total_30 = parseFloat(document.getElementById('thpt_quick').value || 0);
+        else document.getElementById('thpt_quick').value = thpt_total_30.toFixed(2);
+
+        const thpt_100 = (thpt_total_30 / 30) * 100;
+
+        // 4. Exam ĐGNL
+        const dgnl_raw = parseFloat(dgnlInput.value || 0);
+        let dgnl_max = parseFloat(dgnlMaxInput.value || 1200);
+        if(dgnl_max <= 0) dgnl_max = 1200; 
+        
+        const dgnl_100 = (dgnl_raw / dgnl_max) * 100;
+        document.getElementById('dgnl_norm').innerText = dgnl_100.toFixed(2);
+
+        // 5. Branches Calculation
+        const branch1 = (thpt_100 * w1) + (hb_100 * w2);
+        const branch2 = (dgnl_100 * w3) + (hb_100 * w4);
+
+        // 6. Bonus Points Logic
+        const kv = parseFloat(kvSelect.value);
+        const dt = parseFloat(dtSelect.value);
+        const other = parseFloat(otherBonus.value || 0);
+        const total_bonus_raw_30 = kv + dt + other;
+
+        const best_academic_30 = Math.max(branch1, branch2) * 30 / 100;
+        
+        let bonus_applied_30 = total_bonus_raw_30;
+        if (best_academic_30 > 22.5) {
+            bonus_applied_30 = total_bonus_raw_30 * ((30 - best_academic_30) / 7.5);
+        }
+        if (bonus_applied_30 < 0) bonus_applied_30 = 0;
+
+        const bonus_applied_100 = (bonus_applied_30 / 30) * 100;
+
+        // 7. Final Results
+        const final_100 = Math.max(branch1, branch2) + bonus_applied_100;
+        const final_30 = (final_100 / 100) * 30;
+
+        // Update UI
+        document.getElementById('total_100').innerHTML = `${final_100.toFixed(2)} <span>/ 100</span>`;
+        document.getElementById('total_30').innerText = final_30.toFixed(2);
+        
+        document.getElementById('val_branch1').innerText = branch1.toFixed(2);
+        document.getElementById('val_branch1_30').innerText = `~ ${(branch1 * 30 / 100).toFixed(2)} / 30`;
+        document.getElementById('val_branch2').innerText = branch2.toFixed(2);
+        document.getElementById('val_branch2_30').innerText = `~ ${(branch2 * 30 / 100).toFixed(2)} / 30`;
+
+        if(branch1 >= branch2) {
+            document.getElementById('card_branch1').classList.add('active');
+            document.getElementById('card_branch2').classList.remove('active');
+        } else {
+            document.getElementById('card_branch2').classList.add('active');
+            document.getElementById('card_branch1').classList.remove('active');
+        }
+
+        document.getElementById('res_dgnl').innerText = dgnl_100.toFixed(2);
+        document.getElementById('res_thpt').innerText = thpt_100.toFixed(2);
+        document.getElementById('res_hb').innerText = hb_100.toFixed(2);
+        document.getElementById('res_bonus_raw').innerText = total_bonus_raw_30.toFixed(2);
+        document.getElementById('res_bonus_final').innerText = `~ +${bonus_applied_100.toFixed(2)}`;
+        
+        if(best_academic_30 > 22.5) {
+            document.getElementById('bonus_note').innerText = "Điểm cộng đã giảm theo quy định Bộ GD (>22.5đ)";
+            document.getElementById('bonus_note').style.color = "#856404";
+        } else {
+            document.getElementById('bonus_note').innerText = "Điểm cộng được giữ nguyên";
+            document.getElementById('bonus_note').style.color = "var(--text-sub)";
+        }
+    }
+
+    // Event Listeners
+    [w1Slider, w3Slider, dgnlInput, dgnlMaxInput, kvSelect, dtSelect, otherBonus].forEach(el => {
+        el.addEventListener('input', calculate);
+    });
+
+    document.querySelectorAll('.input-score').forEach(el => {
+        el.addEventListener('input', calculate);
+    });
+
+    // Initialize
+    calculate();
+</script>
+
+</body>
+</html>
