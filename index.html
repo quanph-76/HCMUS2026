@@ -23,127 +23,43 @@
         * { box-sizing: border-box; font-family: 'Inter', sans-serif; }
         body { background-color: var(--bg); color: var(--text-main); margin: 0; padding: 20px; }
 
-        /* Style cho tiêu đề lớn phía trên cùng */
-        .app-header {
-            text-align: center;
-            margin-bottom: 30px;
-            margin-top: 10px;
-        }
-        
-        .app-header h1 {
-            color: var(--primary);
-            font-size: 28px;
-            font-weight: 800;
-            text-transform: uppercase;
-            letter-spacing: 0.5px;
-            margin: 0 0 8px 0;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 12px;
-        }
-        
-        .app-header p {
-            color: var(--text-sub);
-            font-size: 15px;
-            margin: 0;
-            font-weight: 500;
-        }
+        .app-header { text-align: center; margin-bottom: 30px; margin-top: 10px; }
+        .app-header h1 { color: var(--primary); font-size: 28px; font-weight: 800; text-transform: uppercase; margin: 0 0 8px 0; display: flex; align-items: center; justify-content: center; gap: 12px; }
+        .app-header p { color: var(--text-sub); font-size: 15px; margin: 0; font-weight: 500; }
 
-        .app-container {
-            max-width: 1100px;
-            margin: 0 auto;
-            display: grid;
-            grid-template-columns: 1fr 380px;
-            gap: 24px;
-        }
+        .app-container { max-width: 1100px; margin: 0 auto; display: grid; grid-template-columns: 1fr 380px; gap: 24px; }
+        @media (max-width: 992px) { .app-container { grid-template-columns: 1fr; } .sidebar { position: static !important; } }
 
-        @media (max-width: 992px) {
-            .app-container { grid-template-columns: 1fr; }
-            .sidebar { position: static !important; }
-        }
-
-        /* Card Styles */
-        .card {
-            background: var(--card-bg);
-            border-radius: 16px;
-            border: 1px solid var(--border);
-            padding: 24px;
-            margin-bottom: 24px;
-            box-shadow: 0 1px 3px rgba(0,0,0,0.05);
-        }
-
-        .card-title {
-            display: flex;
-            align-items: center;
-            gap: 12px;
-            font-size: 18px;
-            font-weight: 700;
-            color: #0f172a;
-            margin-bottom: 24px;
-        }
-
+        .card { background: var(--card-bg); border-radius: 16px; border: 1px solid var(--border); padding: 24px; margin-bottom: 24px; box-shadow: 0 1px 3px rgba(0,0,0,0.05); }
+        .card-title { display: flex; align-items: center; gap: 12px; font-size: 18px; font-weight: 700; color: #0f172a; margin-bottom: 24px; }
         .card-title i { color: var(--primary); }
 
-        /* Weight Sliders */
         .weight-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
         .weight-item { background: var(--bg); padding: 16px; border-radius: 12px; }
         .weight-header { display: flex; justify-content: space-between; margin-bottom: 15px; font-weight: 600; }
         .weight-value { color: var(--primary); background: white; padding: 4px 12px; border-radius: 6px; border: 1px solid var(--border); }
         input[type="range"] { width: 100%; height: 6px; accent-color: var(--primary); cursor: pointer; }
 
-        /* Table Academic */
         .table-responsive { overflow-x: auto; }
         table { width: 100%; border-collapse: collapse; margin-bottom: 20px; }
         th { text-align: left; padding: 12px; font-size: 13px; color: var(--text-sub); font-weight: 500; }
         td { padding: 8px; }
         
-        .input-score {
-            width: 100%;
-            padding: 10px;
-            border: 1px solid var(--border);
-            border-radius: 8px;
-            text-align: center;
-            font-size: 14px;
-            transition: all 0.2s;
-        }
+        .input-score { width: 100%; padding: 10px; border: 1px solid var(--border); border-radius: 8px; text-align: center; font-size: 14px; transition: all 0.2s; }
         .input-score:focus { border-color: var(--primary); outline: none; background: var(--primary-light); }
 
-        .quick-input-box {
-            background: var(--bg);
-            padding: 16px;
-            border-radius: 12px;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            border: 1px dashed var(--border);
-        }
+        .quick-input-box { background: var(--bg); padding: 16px; border-radius: 12px; display: flex; justify-content: space-between; align-items: center; border: 1px dashed var(--border); }
 
-        /* Result Sidebar */
         .sidebar { position: sticky; top: 20px; height: fit-content; }
         .result-card { padding: 0; overflow: hidden; border: none; }
-        .result-header {
-            background: var(--primary);
-            color: white;
-            padding: 32px 24px;
-            text-align: left;
-            position: relative;
-        }
+        .result-header { background: var(--primary); color: white; padding: 32px 24px; text-align: left; position: relative; }
         .result-header h4 { margin: 0; font-weight: 500; opacity: 0.9; font-size: 16px; }
         .main-score { font-size: 56px; font-weight: 800; margin: 8px 0; }
         .main-score span { font-size: 20px; opacity: 0.7; font-weight: 500; }
         .sub-score-30 { font-size: 16px; opacity: 0.9; }
 
         .result-body { padding: 24px; }
-        .branch-item {
-            padding: 16px;
-            border-radius: 12px;
-            border: 1px solid var(--border);
-            margin-bottom: 12px;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
+        .branch-item { padding: 16px; border-radius: 12px; border: 1px solid var(--border); margin-bottom: 12px; display: flex; justify-content: space-between; align-items: center; }
         .branch-item.active { border-color: var(--success); background: var(--success-light); }
         .branch-label div:first-child { font-weight: 600; margin-bottom: 4px; }
         .branch-label div:last-child { font-size: 12px; color: var(--text-sub); }
@@ -154,27 +70,33 @@
         .detail-row { display: flex; justify-content: space-between; margin-bottom: 10px; font-size: 14px; }
         .detail-row span:last-child { font-weight: 600; }
         
-        .badge-bonus {
-            background: #fff8e1;
-            border: 1px solid #ffe082;
-            padding: 10px;
-            border-radius: 8px;
-            margin-top: 15px;
-            font-size: 13px;
-        }
+        .badge-bonus { background: #fff8e1; border: 1px solid #ffe082; padding: 10px; border-radius: 8px; margin-top: 15px; font-size: 13px; }
+        .select-input { width: 100%; padding: 10px; border-radius: 8px; border: 1px solid var(--border); background: white; }
 
-        .select-input {
+        /* Nút lưu dữ liệu Google Sheet */
+        .btn-submit-sheet {
             width: 100%;
-            padding: 10px;
-            border-radius: 8px;
-            border: 1px solid var(--border);
-            background: white;
+            padding: 14px;
+            background-color: #107c41;
+            color: white;
+            border: none;
+            border-radius: 12px;
+            font-size: 15px;
+            font-weight: 600;
+            cursor: pointer;
+            margin-top: 15px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            transition: background 0.2s;
         }
+        .btn-submit-sheet:hover { background-color: #0b592e; }
+        .btn-submit-sheet:disabled { background-color: #a6c8b5; cursor: not-allowed; }
     </style>
 </head>
 <body>
 
-<!-- Khối tiêu đề chính mới thêm -->
 <div class="app-header">
     <h1><i class="fa-solid fa-graduation-cap"></i> Công cụ tính toán điểm HCMUS</h1>
     <p>Hệ thống tự động tính toán điểm xét tuyển Phương thức 2 - Tuyển sinh 2026</p>
@@ -186,9 +108,7 @@
             <div class="card-title"><i class="fa-solid fa-gear"></i> 1. Trọng số (W)</div>
             <div class="weight-grid">
                 <div class="weight-item">
-                    <div class="weight-header">
-                        <span>Nhánh 1 (THPT + Học bạ)</span>
-                    </div>
+                    <div class="weight-header"><span>Nhánh 1 (THPT + Học bạ)</span></div>
                     <label style="font-size: 12px; color: var(--text-sub);">w1 (THPT)</label>
                     <div style="display: flex; align-items: center; gap: 15px; margin: 10px 0;">
                         <input type="range" id="w1_slider" min="0" max="1" step="0.05" value="0.7">
@@ -201,9 +121,7 @@
                 </div>
 
                 <div class="weight-item">
-                    <div class="weight-header">
-                        <span>Nhánh 2 (ĐGNL + Học bạ)</span>
-                    </div>
+                    <div class="weight-header"><span>Nhánh 2 (ĐGNL + Học bạ)</span></div>
                     <label style="font-size: 12px; color: var(--text-sub);">w3 (ĐGNL)</label>
                     <div style="display: flex; align-items: center; gap: 15px; margin: 10px 0;">
                         <input type="range" id="w3_slider" min="0" max="1" step="0.05" value="0.7">
@@ -266,18 +184,9 @@
                 <div>
                     <h5 style="margin-top: 0;"><i class="fa-solid fa-graduation-cap"></i> Kỳ thi THPT 2026</h5>
                     <div style="display: grid; gap: 10px;">
-                        <div style="display: flex; align-items: center; justify-content: space-between;">
-                            <span style="font-size: 14px;">Môn 1</span>
-                            <input type="number" class="input-score thpt-input" style="width: 120px;" value="0.0">
-                        </div>
-                        <div style="display: flex; align-items: center; justify-content: space-between;">
-                            <span style="font-size: 14px;">Môn 2</span>
-                            <input type="number" class="input-score thpt-input" style="width: 120px;" value="0.0">
-                        </div>
-                        <div style="display: flex; align-items: center; justify-content: space-between;">
-                            <span style="font-size: 14px;">Môn 3</span>
-                            <input type="number" class="input-score thpt-input" style="width: 120px;" value="0.0">
-                        </div>
+                        <div style="display: flex; align-items: center; justify-content: space-between;"><span>Môn 1</span><input type="number" class="input-score thpt-input" style="width: 120px;" value="0.0"></div>
+                        <div style="display: flex; align-items: center; justify-content: space-between;"><span>Môn 2</span><input type="number" class="input-score thpt-input" style="width: 120px;" value="0.0"></div>
+                        <div style="display: flex; align-items: center; justify-content: space-between;"><span>Môn 3</span><input type="number" class="input-score thpt-input" style="width: 120px;" value="0.0"></div>
                     </div>
                     <div class="quick-input-box" style="margin-top: 15px;">
                         <span style="font-size: 13px;">Nhập nhanh tổng THPT</span>
@@ -292,7 +201,7 @@
                         <input type="number" id="dgnl_score" class="input-score" style="text-align: left;" value="850">
                     </div>
                     <div class="form-group" style="margin-bottom: 12px;">
-                        <label style="font-size: 13px; color: var(--text-sub); font-weight: 600; color: var(--primary);">Điểm Max ĐGNL (Có thể tự sửa)</label>
+                        <label style="font-size: 13px; color: var(--text-sub); font-weight: 600; color: var(--primary);">Điểm Max ĐGNL</label>
                         <input type="number" id="dgnl_max" class="input-score" style="text-align: left; font-weight: bold; border-color: var(--primary);" value="1200">
                     </div>
                     <div class="quick-input-box" style="padding: 8px 12px; background: #f1f5f9;">
@@ -337,9 +246,6 @@
                 <h4>Điểm xét tuyển</h4>
                 <div class="main-score" id="total_100">0.00 <span>/ 100</span></div>
                 <div class="sub-score-30">Thang 30: <strong id="total_30">0.00</strong></div>
-                <div style="position: absolute; right: 20px; top: 35px; opacity: 0.2; font-size: 60px;">
-                    <i class="fa-solid fa-calculator"></i>
-                </div>
             </div>
             
             <div class="result-body">
@@ -365,12 +271,12 @@
                     </div>
                 </div>
 
-                <div style="margin: 20px 0 10px; color: var(--text-sub); font-size: 12px; font-weight: 700; text-transform: uppercase; letter-spacing: 1px;">Điểm học lực</div>
+                <div style="margin: 20px 0 10px; color: var(--text-sub); font-size: 12px; font-weight: 700; text-transform: uppercase;">Điểm học lực</div>
                 <div class="detail-row"><span>ĐGNL chuẩn hóa</span><span id="res_dgnl">0.00</span></div>
                 <div class="detail-row"><span>THPT chuẩn hóa</span><span id="res_thpt">0.00</span></div>
                 <div class="detail-row"><span>Học bạ chuẩn hóa</span><span id="res_hb">0.00</span></div>
 
-                <div style="margin: 20px 0 10px; color: var(--text-sub); font-size: 12px; font-weight: 700; text-transform: uppercase; letter-spacing: 1px;">Ưu tiên & Điểm cộng</div>
+                <div style="margin: 20px 0 10px; color: var(--text-sub); font-size: 12px; font-weight: 700; text-transform: uppercase;">Ưu tiên & Điểm cộng</div>
                 <div class="detail-row"><span>Cộng gốc (thang 30)</span><span id="res_bonus_raw">0.00</span></div>
                 
                 <div class="badge-bonus" id="bonus_applied_box">
@@ -380,13 +286,23 @@
                     </div>
                     <div style="font-size: 11px; margin-top: 4px; opacity: 0.8;" id="bonus_note">Dành cho thang 100</div>
                 </div>
+
+                <button class="btn-submit-sheet" id="btnSaveSheet" onclick="saveToGoogleSheet()">
+                    <i class="fa-solid fa-file-excel"></i> <span id="btnText">Lưu dữ liệu xuống Google Sheet</span>
+                </button>
             </div>
         </div>
     </div>
 </div>
 
 <script>
-    // Elements
+    // ĐIỀN ĐƯỜNG LINK URL TRIỂN KHAI CỦA GOOGLE APP SCRIPT VÀO ĐÂY:
+    const SCRIPT_URL = "THAY_THE_LINK_CUA_BAN_VAO_DAY";
+
+    // Global variables to hold values for sheet submission
+    let current_hb_30 = 0, current_thpt_30 = 0, current_dgnl_raw = 0, current_bonus_30 = 0;
+    let current_final_100 = 0, current_final_30 = 0;
+
     const w1Slider = document.getElementById('w1_slider');
     const w3Slider = document.getElementById('w3_slider');
     const hbInputs = document.querySelectorAll('.hb-input');
@@ -398,7 +314,6 @@
     const otherBonus = document.getElementById('other_bonus');
 
     function calculate() {
-        // 1. Weights
         const w1 = parseFloat(w1Slider.value);
         const w2 = 1 - w1;
         const w3 = parseFloat(w3Slider.value);
@@ -411,61 +326,48 @@
         document.getElementById('w1_label_desc').innerText = `${(w1*100).toFixed(0)}% + ${(w2*100).toFixed(0)}%`;
         document.getElementById('w3_label_desc').innerText = `${(w3*100).toFixed(0)}% + ${(w4*100).toFixed(0)}%`;
 
-        // 2. Academic Record (Học bạ)
-        let hb_total_30 = 0;
         let hb_sum = 0;
         hbInputs.forEach(i => hb_sum += parseFloat(i.value || 0));
-        hb_total_30 = hb_sum / 3; 
+        current_hb_30 = hb_sum / 3; 
         
-        if(hb_sum === 0) hb_total_30 = parseFloat(document.getElementById('hb_quick').value || 0);
-        else document.getElementById('hb_quick').value = hb_total_30.toFixed(2);
+        if(hb_sum === 0) current_hb_30 = parseFloat(document.getElementById('hb_quick').value || 0);
+        else document.getElementById('hb_quick').value = current_hb_30.toFixed(2);
+        const hb_100 = (current_hb_30 / 30) * 100;
 
-        const hb_100 = (hb_total_30 / 30) * 100;
-
-        // 3. Exam THPT
         let thpt_sum = 0;
         thptInputs.forEach(i => thpt_sum += parseFloat(i.value || 0));
-        let thpt_total_30 = thpt_sum;
-        if(thpt_sum === 0) thpt_total_30 = parseFloat(document.getElementById('thpt_quick').value || 0);
-        else document.getElementById('thpt_quick').value = thpt_total_30.toFixed(2);
+        current_thpt_30 = thpt_sum;
+        if(thpt_sum === 0) current_thpt_30 = parseFloat(document.getElementById('thpt_quick').value || 0);
+        else document.getElementById('thpt_quick').value = current_thpt_30.toFixed(2);
+        const thpt_100 = (current_thpt_30 / 30) * 100;
 
-        const thpt_100 = (thpt_total_30 / 30) * 100;
-
-        // 4. Exam ĐGNL
-        const dgnl_raw = parseFloat(dgnlInput.value || 0);
+        current_dgnl_raw = parseFloat(dgnlInput.value || 0);
         let dgnl_max = parseFloat(dgnlMaxInput.value || 1200);
         if(dgnl_max <= 0) dgnl_max = 1200; 
-        
-        const dgnl_100 = (dgnl_raw / dgnl_max) * 100;
+        const dgnl_100 = (current_dgnl_raw / dgnl_max) * 100;
         document.getElementById('dgnl_norm').innerText = dgnl_100.toFixed(2);
 
-        // 5. Branches Calculation
         const branch1 = (thpt_100 * w1) + (hb_100 * w2);
         const branch2 = (dgnl_100 * w3) + (hb_100 * w4);
 
-        // 6. Bonus Points Logic
         const kv = parseFloat(kvSelect.value);
         const dt = parseFloat(dtSelect.value);
         const other = parseFloat(otherBonus.value || 0);
-        const total_bonus_raw_30 = kv + dt + other;
+        current_bonus_30 = kv + dt + other;
 
         const best_academic_30 = Math.max(branch1, branch2) * 30 / 100;
-        
-        let bonus_applied_30 = total_bonus_raw_30;
+        let bonus_applied_30 = current_bonus_30;
         if (best_academic_30 > 22.5) {
-            bonus_applied_30 = total_bonus_raw_30 * ((30 - best_academic_30) / 7.5);
+            bonus_applied_30 = current_bonus_30 * ((30 - best_academic_30) / 7.5);
         }
         if (bonus_applied_30 < 0) bonus_applied_30 = 0;
-
         const bonus_applied_100 = (bonus_applied_30 / 30) * 100;
 
-        // 7. Final Results
-        const final_100 = Math.max(branch1, branch2) + bonus_applied_100;
-        const final_30 = (final_100 / 100) * 30;
+        current_final_100 = Math.max(branch1, branch2) + bonus_applied_100;
+        current_final_30 = (current_final_100 / 100) * 30;
 
-        // Update UI
-        document.getElementById('total_100').innerHTML = `${final_100.toFixed(2)} <span>/ 100</span>`;
-        document.getElementById('total_30').innerText = final_30.toFixed(2);
+        document.getElementById('total_100').innerHTML = `${current_final_100.toFixed(2)} <span>/ 100</span>`;
+        document.getElementById('total_30').innerText = current_final_30.toFixed(2);
         
         document.getElementById('val_branch1').innerText = branch1.toFixed(2);
         document.getElementById('val_branch1_30').innerText = `~ ${(branch1 * 30 / 100).toFixed(2)} / 30`;
@@ -483,7 +385,7 @@
         document.getElementById('res_dgnl').innerText = dgnl_100.toFixed(2);
         document.getElementById('res_thpt').innerText = thpt_100.toFixed(2);
         document.getElementById('res_hb').innerText = hb_100.toFixed(2);
-        document.getElementById('res_bonus_raw').innerText = total_bonus_raw_30.toFixed(2);
+        document.getElementById('res_bonus_raw').innerText = current_bonus_30.toFixed(2);
         document.getElementById('res_bonus_final').innerText = `~ +${bonus_applied_100.toFixed(2)}`;
         
         if(best_academic_30 > 22.5) {
@@ -495,18 +397,61 @@
         }
     }
 
-    // Event Listeners
-    [w1Slider, w3Slider, dgnlInput, dgnlMaxInput, kvSelect, dtSelect, otherBonus].forEach(el => {
-        el.addEventListener('input', calculate);
-    });
+    // HÀM GỬI DỮ LIỆU ĐIỂM SỐ XUỐNG SHEET
+    function saveToGoogleSheet() {
+        if(SCRIPT_URL === "https://script.google.com/macros/s/AKfycbx7nujqo2g_KFPf0M9cN0BAE4h_7b6uEeFjo9RB9zYSE_8P_2FpSkt2Dnnkpn1eriVA3g/exec" || !SCRIPT_URL.startsWith('http')) {
+            alert("Vui lòng thiết lập đường dẫn SCRIPT_URL chính xác từ Google Apps Script ở Bước 1 trước!");
+            return;
+        }
 
-    document.querySelectorAll('.input-score').forEach(el => {
-        el.addEventListener('input', calculate);
-    });
+        const btn = document.getElementById('btnSaveSheet');
+        const btnText = document.getElementById('btnText');
+        
+        // Trạng thái Loading
+        btn.disabled = true;
+        btnText.innerText = "Đang gửi dữ liệu...";
 
-    // Initialize
+        // Khởi tạo FormData đẩy thông tin lên tương ứng với tiêu đề cột
+        const formData = new URLSearchParams();
+        formData.append('Học bạ', current_hb_30.toFixed(2));
+        formData.append('THPT', current_thpt_30.toFixed(2));
+        formData.append('ĐGNL', current_dgnl_raw.toFixed(0));
+        formData.append('Ưu tiên', current_bonus_30.toFixed(2));
+        formData.append('Điểm 100', current_final_100.toFixed(2));
+        formData.append('Điểm 30', current_final_30.toFixed(2));
+
+        fetch(SCRIPT_URL, {
+            method: 'POST',
+            body: formData,
+            headers: { 'Content-Type': 'application/x-www-form-urlencoded' }
+        })
+        .then(response => response.json())
+        .then(data => {
+            if(data.result === 'success') {
+                alert("Chúc mừng! Lưu dữ liệu điểm thành công xuống Google Sheet!");
+                btnText.innerText = "Đã lưu thành công ✓";
+                btn.style.backgroundColor = "#22c55e"; // Đổi nút sang xanh lá
+            } else {
+                alert("Lỗi máy chủ: " + data.error);
+                resetButton();
+            }
+        })
+        .catch(error => {
+            console.error('Error:', error);
+            alert("Có lỗi kết nối xảy ra. Vui lòng kiểm tra lại cấu hình CORS/Quyền truy cập Web App!");
+            resetButton();
+        });
+
+        function resetButton() {
+            btn.disabled = false;
+            btnText.innerText = "Lưu dữ liệu xuống Google Sheet";
+        }
+    }
+
+    // Khởi tạo Lắng nghe sự kiện đầu vào
+    [w1Slider, w3Slider, dgnlInput, dgnlMaxInput, kvSelect, dtSelect, otherBonus].forEach(el => { el.addEventListener('input', calculate); });
+    document.querySelectorAll('.input-score').forEach(el => { el.addEventListener('input', calculate); });
     calculate();
 </script>
-
 </body>
 </html>
