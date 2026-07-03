@@ -36,9 +36,31 @@
 
         .weight-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
         .weight-item { background: var(--bg); padding: 16px; border-radius: 12px; }
-        .weight-header { display: flex; justify-content: space-between; margin-bottom: 15px; font-weight: 600; }
-        .weight-value { color: var(--primary); background: white; padding: 4px 12px; border-radius: 6px; border: 1px solid var(--border); }
-        input[type="range"] { width: 100%; height: 6px; accent-color: var(--primary); cursor: pointer; }
+        .weight-header { display: flex; justify-content: space-between; margin-bottom: 12px; font-weight: 600; }
+        
+        /* Style cho ô nhập trọng số mới */
+        .weight-input-container {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 10px;
+            background: white;
+            padding: 6px 12px;
+            border-radius: 8px;
+            border: 1px solid var(--border);
+        }
+        .weight-input-container span { font-size: 13px; color: var(--text-main); font-weight: 500; }
+        .input-w {
+            width: 80px;
+            padding: 6px;
+            border: 1px solid var(--border);
+            border-radius: 6px;
+            text-align: center;
+            font-weight: 700;
+            color: var(--primary);
+            font-size: 14px;
+        }
+        .input-w:focus { border-color: var(--primary); outline: none; background: var(--primary-light); }
 
         .table-responsive { overflow-x: auto; }
         table { width: 100%; border-collapse: collapse; margin-bottom: 20px; }
@@ -73,7 +95,6 @@
         .badge-bonus { background: #fff8e1; border: 1px solid #ffe082; padding: 10px; border-radius: 8px; margin-top: 15px; font-size: 13px; }
         .select-input { width: 100%; padding: 10px; border-radius: 8px; border: 1px solid var(--border); background: white; }
 
-        /* Nút lưu dữ liệu Google Sheet */
         .btn-submit-sheet {
             width: 100%;
             padding: 14px;
@@ -109,27 +130,29 @@
             <div class="weight-grid">
                 <div class="weight-item">
                     <div class="weight-header"><span>Nhánh 1 (THPT + Học bạ)</span></div>
-                    <label style="font-size: 12px; color: var(--text-sub);">w1 (THPT)</label>
-                    <div style="display: flex; align-items: center; gap: 15px; margin: 10px 0;">
-                        <input type="range" id="w1_slider" min="0" max="1" step="0.05" value="0.7">
-                        <span class="weight-value" id="w1_text">0.70</span>
+                    
+                    <div class="weight-input-container">
+                        <span>w1 (Trọng số THPT):</span>
+                        <input type="number" id="w1_input" class="input-w" min="0" max="1" step="0.01" value="0.70">
                     </div>
-                    <div class="quick-input-box" style="padding: 8px 12px; font-size: 13px;">
-                        <span>w2 (Học bạ) = 1 - w1</span>
-                        <span style="font-weight: 700; color: var(--primary);" id="w2_text">0.30</span>
+                    
+                    <div class="weight-input-container">
+                        <span>w2 (Trọng số Học bạ):</span>
+                        <input type="number" id="w2_input" class="input-w" min="0" max="1" step="0.01" value="0.30">
                     </div>
                 </div>
 
                 <div class="weight-item">
                     <div class="weight-header"><span>Nhánh 2 (ĐGNL + Học bạ)</span></div>
-                    <label style="font-size: 12px; color: var(--text-sub);">w3 (ĐGNL)</label>
-                    <div style="display: flex; align-items: center; gap: 15px; margin: 10px 0;">
-                        <input type="range" id="w3_slider" min="0" max="1" step="0.05" value="0.7">
-                        <span class="weight-value" id="w3_text">0.70</span>
+                    
+                    <div class="weight-input-container">
+                        <span>w3 (Trọng số ĐGNL):</span>
+                        <input type="number" id="w3_input" class="input-w" min="0" max="1" step="0.01" value="0.70">
                     </div>
-                    <div class="quick-input-box" style="padding: 8px 12px; font-size: 13px;">
-                        <span>w4 (Học bạ) = 1 - w3</span>
-                        <span style="font-weight: 700; color: var(--primary);" id="w4_text">0.30</span>
+                    
+                    <div class="weight-input-container">
+                        <span>w4 (Trọng số Học bạ):</span>
+                        <input type="number" id="w4_input" class="input-w" min="0" max="1" step="0.01" value="0.30">
                     </div>
                 </div>
             </div>
@@ -299,12 +322,15 @@
     // ĐIỀN ĐƯỜNG LINK URL TRIỂN KHAI CỦA GOOGLE APP SCRIPT VÀO ĐÂY:
     const SCRIPT_URL = "THAY_THE_LINK_CUA_BAN_VAO_DAY";
 
-    // Global variables to hold values for sheet submission
     let current_hb_30 = 0, current_thpt_30 = 0, current_dgnl_raw = 0, current_bonus_30 = 0;
     let current_final_100 = 0, current_final_30 = 0;
 
-    const w1Slider = document.getElementById('w1_slider');
-    const w3Slider = document.getElementById('w3_slider');
+    // Elements Trọng số số mới
+    const w1Input = document.getElementById('w1_input');
+    const w2Input = document.getElementById('w2_input');
+    const w3Input = document.getElementById('w3_input');
+    const w4Input = document.getElementById('w4_input');
+
     const hbInputs = document.querySelectorAll('.hb-input');
     const thptInputs = document.querySelectorAll('.thpt-input');
     const dgnlInput = document.getElementById('dgnl_score');
@@ -313,27 +339,52 @@
     const dtSelect = document.getElementById('dt_select');
     const otherBonus = document.getElementById('other_bonus');
 
-    function calculate() {
-        const w1 = parseFloat(w1Slider.value);
-        const w2 = 1 - w1;
-        const w3 = parseFloat(w3Slider.value);
-        const w4 = 1 - w3;
+    // LOGIC TỰ ĐỘNG CÂN BẰNG TRỌNG SỐ (TỔNG = 1) KHI TỰ ĐIỀN
+    w1Input.addEventListener('input', () => {
+        let val = parseFloat(w1Input.value || 0);
+        if (val > 1) val = 1; if (val < 0) val = 0;
+        w2Input.value = (1 - val).toFixed(2);
+        calculate();
+    });
+    w2Input.addEventListener('input', () => {
+        let val = parseFloat(w2Input.value || 0);
+        if (val > 1) val = 1; if (val < 0) val = 0;
+        w1Input.value = (1 - val).toFixed(2);
+        calculate();
+    });
+    w3Input.addEventListener('input', () => {
+        let val = parseFloat(w3Input.value || 0);
+        if (val > 1) val = 1; if (val < 0) val = 0;
+        w4Input.value = (1 - val).toFixed(2);
+        calculate();
+    });
+    w4Input.addEventListener('input', () => {
+        let val = parseFloat(w4Input.value || 0);
+        if (val > 1) val = 1; if (val < 0) val = 0;
+        w3Input.value = (1 - val).toFixed(2);
+        calculate();
+    });
 
-        document.getElementById('w1_text').innerText = w1.toFixed(2);
-        document.getElementById('w2_text').innerText = w2.toFixed(2);
-        document.getElementById('w3_text').innerText = w3.toFixed(2);
-        document.getElementById('w4_text').innerText = w4.toFixed(2);
+    function calculate() {
+        // Lấy giá trị trọng số từ ô nhập
+        const w1 = parseFloat(w1Input.value || 0);
+        const w2 = parseFloat(w2Input.value || 0);
+        const w3 = parseFloat(w3Input.value || 0);
+        const w4 = parseFloat(w4Input.value || 0);
+
+        // Cập nhật mô tả text hiển thị ở sidebar kết quả
         document.getElementById('w1_label_desc').innerText = `${(w1*100).toFixed(0)}% + ${(w2*100).toFixed(0)}%`;
         document.getElementById('w3_label_desc').innerText = `${(w3*100).toFixed(0)}% + ${(w4*100).toFixed(0)}%`;
 
+        // Tính điểm Học bạ
         let hb_sum = 0;
         hbInputs.forEach(i => hb_sum += parseFloat(i.value || 0));
         current_hb_30 = hb_sum / 3; 
-        
         if(hb_sum === 0) current_hb_30 = parseFloat(document.getElementById('hb_quick').value || 0);
         else document.getElementById('hb_quick').value = current_hb_30.toFixed(2);
         const hb_100 = (current_hb_30 / 30) * 100;
 
+        // Tính điểm THPT
         let thpt_sum = 0;
         thptInputs.forEach(i => thpt_sum += parseFloat(i.value || 0));
         current_thpt_30 = thpt_sum;
@@ -341,15 +392,18 @@
         else document.getElementById('thpt_quick').value = current_thpt_30.toFixed(2);
         const thpt_100 = (current_thpt_30 / 30) * 100;
 
+        // Tính điểm ĐGNL
         current_dgnl_raw = parseFloat(dgnlInput.value || 0);
         let dgnl_max = parseFloat(dgnlMaxInput.value || 1200);
         if(dgnl_max <= 0) dgnl_max = 1200; 
         const dgnl_100 = (current_dgnl_raw / dgnl_max) * 100;
         document.getElementById('dgnl_norm').innerText = dgnl_100.toFixed(2);
 
+        // Tính điểm các nhánh theo trọng số đã điền
         const branch1 = (thpt_100 * w1) + (hb_100 * w2);
         const branch2 = (dgnl_100 * w3) + (hb_100 * w4);
 
+        // Tính điểm ưu tiên
         const kv = parseFloat(kvSelect.value);
         const dt = parseFloat(dtSelect.value);
         const other = parseFloat(otherBonus.value || 0);
@@ -363,9 +417,11 @@
         if (bonus_applied_30 < 0) bonus_applied_30 = 0;
         const bonus_applied_100 = (bonus_applied_30 / 30) * 100;
 
+        // Tổng điểm cuối cùng
         current_final_100 = Math.max(branch1, branch2) + bonus_applied_100;
         current_final_30 = (current_final_100 / 100) * 30;
 
+        // Cập nhật giao diện kết quả
         document.getElementById('total_100').innerHTML = `${current_final_100.toFixed(2)} <span>/ 100</span>`;
         document.getElementById('total_30').innerText = current_final_30.toFixed(2);
         
@@ -397,21 +453,16 @@
         }
     }
 
-    // HÀM GỬI DỮ LIỆU ĐIỂM SỐ XUỐNG SHEET
     function saveToGoogleSheet() {
-        if(SCRIPT_URL === "https://script.google.com/macros/s/AKfycbx7nujqo2g_KFPf0M9cN0BAE4h_7b6uEeFjo9RB9zYSE_8P_2FpSkt2Dnnkpn1eriVA3g/exec" || !SCRIPT_URL.startsWith('http')) {
+        if(SCRIPT_URL === "THAY_THE_LINK_CUA_BAN_VAO_DAY" || !SCRIPT_URL.startsWith('http')) {
             alert("Vui lòng thiết lập đường dẫn SCRIPT_URL chính xác từ Google Apps Script ở Bước 1 trước!");
             return;
         }
-
         const btn = document.getElementById('btnSaveSheet');
         const btnText = document.getElementById('btnText');
-        
-        // Trạng thái Loading
         btn.disabled = true;
         btnText.innerText = "Đang gửi dữ liệu...";
 
-        // Khởi tạo FormData đẩy thông tin lên tương ứng với tiêu đề cột
         const formData = new URLSearchParams();
         formData.append('Học bạ', current_hb_30.toFixed(2));
         formData.append('THPT', current_thpt_30.toFixed(2));
@@ -428,9 +479,9 @@
         .then(response => response.json())
         .then(data => {
             if(data.result === 'success') {
-                alert("Chúc mừng! Lưu dữ liệu điểm thành công xuống Google Sheet!");
+                alert("Lưu dữ liệu điểm thành công xuống Google Sheet!");
                 btnText.innerText = "Đã lưu thành công ✓";
-                btn.style.backgroundColor = "#22c55e"; // Đổi nút sang xanh lá
+                btn.style.backgroundColor = "#22c55e";
             } else {
                 alert("Lỗi máy chủ: " + data.error);
                 resetButton();
@@ -438,7 +489,7 @@
         })
         .catch(error => {
             console.error('Error:', error);
-            alert("Có lỗi kết nối xảy ra. Vui lòng kiểm tra lại cấu hình CORS/Quyền truy cập Web App!");
+            alert("Có lỗi kết nối xảy ra. Vui lòng kiểm tra lại cấu hình Web App!");
             resetButton();
         });
 
@@ -448,9 +499,11 @@
         }
     }
 
-    // Khởi tạo Lắng nghe sự kiện đầu vào
-    [w1Slider, w3Slider, dgnlInput, dgnlMaxInput, kvSelect, dtSelect, otherBonus].forEach(el => { el.addEventListener('input', calculate); });
+    // Event Listeners cho các ô nhập điểm thông thường
+    [dgnlInput, dgnlMaxInput, kvSelect, dtSelect, otherBonus].forEach(el => { el.addEventListener('input', calculate); });
     document.querySelectorAll('.input-score').forEach(el => { el.addEventListener('input', calculate); });
+    
+    // Chạy tính toán lần đầu
     calculate();
 </script>
 </body>
