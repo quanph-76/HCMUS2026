@@ -126,6 +126,7 @@
 
 <div class="app-container">
     <div class="main-content">
+        <!-- 1. Trọng số (W) - Đã fixed mặc định theo tỷ lệ 80/20 -->
         <div class="card">
             <div class="card-title"><i class="fa-solid fa-gear"></i> 1. Trọng số (W)</div>
             <div class="weight-grid">
@@ -155,6 +156,7 @@
             </div>
         </div>
 
+        <!-- 2. Điểm học bạ -->
         <div class="card">
             <div class="card-title"><i class="fa-solid fa-book"></i> 2. Điểm học bạ</div>
             <div class="table-responsive">
@@ -198,6 +200,7 @@
             </div>
         </div>
 
+        <!-- 3. Điểm thi -->
         <div class="card">
             <div class="card-title"><i class="fa-solid fa-bolt"></i> 3. Điểm thi</div>
             <div class="weight-grid">
@@ -218,20 +221,17 @@
                     <h5 style="margin-top: 0;"><i class="fa-solid fa-atom"></i> Kỳ thi ĐGNL 2026</h5>
                     <div class="form-group" style="margin-bottom: 12px;">
                         <label style="font-size: 13px; color: var(--text-sub);">Điểm thi ĐGNL đạt được</label>
-                        <input type="number" id="dgnl_score" class="input-score" style="text-align: left;" value="850">
+                        <input type="number" id="dgnl_score" class="input-score" style="text-align: left;" value="1100">
                     </div>
-                    <div class="form-group" style="margin-bottom: 12px;">
-                        <label style="font-size: 13px; color: var(--text-sub); font-weight: 600; color: var(--primary);">Điểm Max ĐGNL</label>
-                        <input type="number" id="dgnl_max" class="input-score" style="text-align: left; font-weight: bold; border-color: var(--primary);" value="1200">
-                    </div>
-                    <div class="quick-input-box" style="padding: 8px 12px; background: #f1f5f9;">
-                        <span style="font-size: 13px;">Chuẩn hóa 100:</span>
-                        <span style="font-weight: 700;" id="dgnl_norm">--</span>
+                    <div class="quick-input-box" style="padding: 12px; background: #f1f5f9; display: block;">
+                        <div style="font-size: 12px; color: var(--text-sub); margin-bottom: 4px;">Điểm quy đổi (thang 30):</div>
+                        <span style="font-weight: 700; font-size: 16px; color: var(--primary);" id="dgnl_converted_30">--</span>
                     </div>
                 </div>
             </div>
         </div>
 
+        <!-- 4. Ưu tiên -->
         <div class="card">
             <div class="card-title"><i class="fa-solid fa-award"></i> 4. Ưu tiên & Điểm cộng</div>
             <div class="weight-grid" style="grid-template-columns: 1fr 1fr 120px;">
@@ -264,6 +264,7 @@
         </button>
     </div>
 
+    <!-- Sidebar kết quả -->
     <div class="sidebar">
         <div class="card result-card">
             <div class="result-header" id="resHeader">
@@ -295,10 +296,10 @@
                     </div>
                 </div>
 
-                <div style="margin: 20px 0 10px; color: var(--text-sub); font-size: 12px; font-weight: 700; text-transform: uppercase;">Điểm học lực</div>
-                <div class="detail-row"><span>ĐGNL chuẩn hóa</span><span id="res_dgnl">--.--</span></div>
-                <div class="detail-row"><span>THPT chuẩn hóa</span><span id="res_thpt">--.--</span></div>
-                <div class="detail-row"><span>Học bạ chuẩn hóa</span><span id="res_hb">--.--</span></div>
+                <div style="margin: 20px 0 10px; color: var(--text-sub); font-size: 12px; font-weight: 700; text-transform: uppercase;">Điểm học lực (Hệ 100)</div>
+                <div class="detail-row"><span>ĐGNL nội suy</span><span id="res_dgnl">--.--</span></div>
+                <div class="detail-row"><span>THPT quy đổi</span><span id="res_thpt">--.--</span></div>
+                <div class="detail-row"><span>Học bạ quy đổi</span><span id="res_hb">--.--</span></div>
 
                 <div style="margin: 20px 0 10px; color: var(--text-sub); font-size: 12px; font-weight: 700; text-transform: uppercase;">Ưu tiên & Điểm cộng</div>
                 <div class="detail-row"><span>Cộng gốc (thang 30)</span><span id="res_bonus_raw">--.--</span></div>
@@ -316,8 +317,7 @@
 </div>
 
 <script>
-    // ĐIỀN ĐƯỜNG LINK URL TRIỂN KHAI CỦA GOOGLE APP SCRIPT VÀO ĐÂY:
-    const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbx7nujqo2g_KFPf0M9cN0BAE4h_7b6uEeFjo9RB9zYSE_8P_2FpSkt2Dnnkpn1eriVA3g/exec";
+    const SCRIPT_URL = "THAY_THE_LINK_CUA_BAN_VAO_DAY";
 
     const w1Input = document.getElementById('w1_input');
     const w2Input = document.getElementById('w2_input');
@@ -327,31 +327,53 @@
     const hbInputs = document.querySelectorAll('.hb-input');
     const thptInputs = document.querySelectorAll('.thpt-input');
     const dgnlInput = document.getElementById('dgnl_score');
-    const dgnlMaxInput = document.getElementById('dgnl_max');
     const kvSelect = document.getElementById('kv_select');
     const dtSelect = document.getElementById('dt_select');
     const otherBonus = document.getElementById('other_bonus');
 
     w1Input.addEventListener('input', () => {
-        let val = parseFloat(w1Input.value || 0);
-        if (val > 1) val = 1; if (val < 0) val = 0;
+        let val = parseFloat(w1Input.value || 0); if (val > 1) val = 1; if (val < 0) val = 0;
         w2Input.value = (1 - val).toFixed(2);
     });
     w2Input.addEventListener('input', () => {
-        let val = parseFloat(w2Input.value || 0);
-        if (val > 1) val = 1; if (val < 0) val = 0;
+        let val = parseFloat(w2Input.value || 0); if (val > 1) val = 1; if (val < 0) val = 0;
         w1Input.value = (1 - val).toFixed(2);
     });
     w3Input.addEventListener('input', () => {
-        let val = parseFloat(w3Input.value || 0);
-        if (val > 1) val = 1; if (val < 0) val = 0;
+        let val = parseFloat(w3Input.value || 0); if (val > 1) val = 1; if (val < 0) val = 0;
         w4Input.value = (1 - val).toFixed(2);
     });
     w4Input.addEventListener('input', () => {
-        let val = parseFloat(w4Input.value || 0);
-        if (val > 1) val = 1; if (val < 0) val = 0;
+        let val = parseFloat(w4Input.value || 0); if (val > 1) val = 1; if (val < 0) val = 0;
         w3Input.value = (1 - val).toFixed(2);
     });
+
+    // HÀM NỘI SUY TUYẾN TÍNH ĐIỂM ĐGNL SANG THANG 30 DỰA TRÊN BẢNG PHÂN VỊ CỦA BẠN
+    function convertDgnlTo30(score) {
+        if (score >= 1139) return 30.0;
+        
+        // Mảng cấu trúc phân vị nạp sẵn từ dữ liệu ảnh: [DGNL_Cao, DGNL_Thấp, THPT_Cao, THPT_Thấp]
+        const intervals = [
+            { x1: 1108, x2: 995, a1: 29.75, a2: 27.25 }, // Khoảng phân vị 1% - 2% (Phù hợp ví dụ 1100)
+            { x1: 995,  x2: 967, a1: 27.25, a2: 26.70 }, // Khoảng phân vị 2% - 3%
+            { x1: 967,  x2: 948, a1: 26.70, a2: 26.25 }, // Khoảng phân vị 3% - 4%
+            { x1: 948,  x2: 932, a1: 26.25, a2: 25.85 }, // Khoảng phân vị 4% - 5%
+            { x1: 932,  x2: 918, a1: 25.85, a2: 25.60 }, // Khoảng phân vị 5% - 6%
+            { x1: 918,  x2: 0,   a1: 25.60, a2: 0.00   }  // Khoảng còn lại mặc định tuyến tính về 0
+        ];
+
+        // Tìm khoảng chứa điểm thi
+        for (let segment of intervals) {
+            if (score >= segment.x2 && score <= segment.x1) {
+                // Công thức: A2 + (A1 - A2) * (Điểm_ĐGNL - X2) / (X1 - X2)
+                let res = segment.a2 + (segment.a1 - segment.a2) * (score - segment.x2) / (segment.x1 - segment.x2);
+                return res;
+            }
+        }
+        
+        // Nếu điểm quá thấp nằm ngoài dải tra cứu phân vị
+        return (score / 1139) * 30;
+    }
 
     function processCalculateAndSave() {
         const w1 = parseFloat(w1Input.value || 0);
@@ -362,6 +384,7 @@
         document.getElementById('w1_label_desc').innerText = `${(w1*100).toFixed(0)}% + ${(w2*100).toFixed(0)}%`;
         document.getElementById('w3_label_desc').innerText = `${(w3*100).toFixed(0)}% + ${(w4*100).toFixed(0)}%`;
 
+        // 1. Tính Học bạ
         let hb_sum = 0;
         hbInputs.forEach(i => hb_sum += parseFloat(i.value || 0));
         let hb_30 = hb_sum / 3; 
@@ -369,6 +392,7 @@
         else document.getElementById('hb_quick').value = hb_30.toFixed(2);
         const hb_100 = (hb_30 / 30) * 100;
 
+        // 2. Tính THPT
         let thpt_sum = 0;
         thptInputs.forEach(i => thpt_sum += parseFloat(i.value || 0));
         let thpt_30 = thpt_sum;
@@ -376,15 +400,17 @@
         else document.getElementById('thpt_quick').value = thpt_30.toFixed(2);
         const thpt_100 = (thpt_30 / 30) * 100;
 
+        // 3. Tính ĐGNL theo thuật toán Nội suy tuyến tính mới
         let dgnl_raw = parseFloat(dgnlInput.value || 0);
-        let dgnl_max = parseFloat(dgnlMaxInput.value || 1200);
-        if(dgnl_max <= 0) dgnl_max = 1200; 
-        const dgnl_100 = (dgnl_raw / dgnl_max) * 100;
-        document.getElementById('dgnl_norm').innerText = dgnl_100.toFixed(2);
+        let dgnl_30 = convertDgnlTo30(dgnl_raw);
+        document.getElementById('dgnl_converted_30').innerText = dgnl_30.toFixed(2);
+        const dgnl_100 = (dgnl_30 / 30) * 100;
 
+        // 4. Tính Nhánh theo trọng số mới (80/20)
         const branch1 = (thpt_100 * w1) + (hb_100 * w2);
         const branch2 = (dgnl_100 * w3) + (hb_100 * w4);
 
+        // 5. Điểm Ưu tiên
         const kv = parseFloat(kvSelect.value);
         const dt = parseFloat(dtSelect.value);
         const other = parseFloat(otherBonus.value || 0);
@@ -398,9 +424,11 @@
         if (bonus_applied_30 < 0) bonus_applied_30 = 0;
         const bonus_applied_100 = (bonus_applied_30 / 30) * 100;
 
+        // 6. Điểm tổng
         const final_100 = Math.max(branch1, branch2) + bonus_applied_100;
         const final_30 = (final_100 / 100) * 30;
 
+        // Cập nhật giao diện Kết quả
         document.getElementById('resHeader').classList.add('calculated');
         document.getElementById('total_100').innerHTML = `${final_100.toFixed(2)} <span>/ 100</span>`;
         document.getElementById('total_30').innerText = final_30.toFixed(2);
@@ -432,14 +460,14 @@
             document.getElementById('bonus_note').style.color = "var(--text-sub)";
         }
 
-        if(SCRIPT_URL === "THAY_THE_LINK_CUA_BAN_VAO_DAY" || !SCRIPT_URL.startsWith('http')) {
-            alert("Tính toán điểm hoàn tất! (Dữ liệu chưa lưu do SCRIPT_URL chưa cấu hình).");
+        // Đồng bộ dữ liệu lên Google Sheet
+        if(SCRIPT_URL === "https://script.google.com/macros/s/AKfycbx7nujqo2g_KFPf0M9cN0BAE4h_7b6uEeFjo9RB9zYSE_8P_2FpSkt2Dnnkpn1eriVA3g/exec" || !SCRIPT_URL.startsWith('http')) {
+            alert("Tính toán thành công theo chuẩn nội suy 2026! (Dữ liệu chưa lưu do SCRIPT_URL chưa cấu hình).");
             return;
         }
 
         const btn = document.getElementById('btnCalculate');
         const btnText = document.getElementById('btnText');
-        
         btn.disabled = true;
         btnText.innerText = "Đang đồng bộ Google Sheet...";
 
@@ -473,7 +501,7 @@
         })
         .catch(error => {
             console.error('Error:', error);
-            alert("Kết nối Google Sheet thất bại. Hãy kiểm tra lại kết nối mạng!");
+            alert("Kết nối Google Sheet thất bại. Hãy kiểm tra lại!");
             resetButton();
         });
 
